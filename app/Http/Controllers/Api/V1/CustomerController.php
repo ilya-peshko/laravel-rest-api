@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\V1\CustomerCollection;
 use App\Models\Customer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use App\Http\Resources\V1\CustomerResource;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index()
     {
-        //
+        return new CustomerCollection(Customer::paginate());
     }
 
     /**
@@ -36,10 +39,13 @@ class CustomerController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param  Customer $customer
+     * @return CustomerResource
      */
-    public function show(Customer $customer): Response
+    public function show(Customer $customer)
     {
-        //
+        return new CustomerResource($customer);
     }
 
     /**
