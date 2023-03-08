@@ -1,32 +1,16 @@
 <?php
 
-namespace App\Services\V1;
+namespace App\Filters;
 
 use Illuminate\Http\Request;
 
-class CustomerQuery
+class ApiFilter
 {
-    protected $allowedParams = [
-        'postalCode' => ['eq', 'gt', 'lt'],
-        'name'       => ['eq'],
-        'type'       => ['eq'],
-        'email'      => ['eq'],
-        'address'    => ['eq'],
-        'city'       => ['eq'],
-        'state'      => ['eq'],
-    ];
+    protected $allowedParams = [];
 
-    protected $columnMap = [
-        'postalCode' => 'postal_code',
-    ];
+    protected $columnMap = [];
 
-    protected $operatorMap = [
-        'eq'  => '=',
-        'gt'  => '>',
-        'gte' => '>=',
-        'lt'  => '<',
-        'lte' => '<=',
-    ];
+    protected $operatorMap = [];
 
     public function transform(Request $request)
     {
@@ -45,8 +29,6 @@ class CustomerQuery
                     $eloQuery[] = [$column, $this->operatorMap[$operator], $query[$operator]];
                 }
             }
-
-
         }
 
         return $eloQuery;
