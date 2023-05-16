@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Dto\Customer\CustomerStoreDto;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class CustomerStoreRequest extends FormRequest
@@ -33,6 +35,19 @@ class CustomerStoreRequest extends FormRequest
             'state'      => ['required'],
             'postalCode' => ['required'],
         ];
+    }
+
+    public function toDto(): CustomerStoreDto
+    {
+        return new CustomerStoreDto(
+            name: $this->get('name'),
+            type: $this->get('type'),
+            email: $this->get('email'),
+            address: $this->get('address'),
+            city: $this->get('city'),
+            state: $this->get('state'),
+            postalCode: $this->get('postalCode'),
+        );
     }
 
     protected function prepareForValidation()

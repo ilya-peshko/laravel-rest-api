@@ -11,9 +11,9 @@ class ApiTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Test customers index response.
+     * Test customers list response.
      */
-    public function test_v1_customers_index(): void
+    public function test_v1_customers_list(): void
     {
         $customer = Customer::factory()->create([
             'id'    => 10,

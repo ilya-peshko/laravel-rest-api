@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Dto\Customer\CustomerUpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ class CustomerUpdateRequest extends FormRequest
 
         if ($method === Request::METHOD_PUT) {
             return [
+                'id'         => ['required', 'int'],
                 'name'       => ['required'],
                 'type'       => ['required', Rule::in(['Individual', 'Business', 'individual', 'business'])],
                 'email'      => ['required', 'email'],
@@ -39,23 +41,29 @@ class CustomerUpdateRequest extends FormRequest
             ];
         } else {
             return [
-                'name'       => ['sometimes', 'required'],
-                'type'       => ['sometimes', 'required', Rule::in(['Individual', 'Business', 'individual', 'business'])],
-                'email'      => ['sometimes', 'required', 'email'],
-                'address'    => ['sometimes', 'required'],
-                'city'       => ['sometimes', 'required'],
-                'state'      => ['sometimes', 'required'],
-                'postalCode' => ['sometimes', 'required'],
+                'id'         => ['required', 'int'],
+                'name'       => ['sometimes'],
+                'type'       => ['sometimes', Rule::in(['Individual', 'Business', 'individual', 'business'])],
+                'email'      => ['sometimes', 'email'],
+                'address'    => ['sometimes'],
+                'city'       => ['sometimes'],
+                'state'      => ['sometimes'],
+                'postalCode' => ['sometimes'],
             ];
         }
     }
 
-    protected function prepareForValidation()
+    public function toDto(): CustomerUpdateDto
     {
-        if ($this->postalCode) {
-            $this->merge([
-                'postal_code' => $this->postalCode,
-            ]);
-        }
+        return new CustomerUpdateDto(
+            id: $this->get('id'),
+            name: $this->get('name'),
+            type: $this->get('type'),
+            email: $this->get('email'),
+            address: $this->get('address'),
+            city: $this->get('city'),
+            state: $this->get('state'),
+            postalCode: $this->get('postalCode'),
+        );
     }
 }

@@ -6,21 +6,26 @@ use App\Contracts\Services\CustomerServiceContract;
 use App\Services\CustomerService;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ServiceServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
+     *
+     * @return void
      */
     public function register(): void
     {
-        $this->app->bind(CustomerServiceContract::class, CustomerService::class);
+        //
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
+     *
+     * @return void
      */
     public function boot(): void
     {
-        //
+        # Internal Services
+//        $this->app->bind(CustomerServiceContract::class, CustomerService::class);
     }
 }
