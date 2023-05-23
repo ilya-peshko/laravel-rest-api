@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Contracts\Services\CustomerServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CustomerListRequest;
+use App\Http\Requests\RouteIdRequest;
 use App\Http\Requests\V1\CustomerStoreRequest;
 use App\Http\Requests\V1\CustomerUpdateRequest;
 use App\Http\Resources\V1\CustomerCollection;
@@ -53,10 +54,10 @@ class CustomerController extends Controller
      *
      * @throws JsonException
      */
-    public function show(int $id, CustomerServiceContract $customerService): ApiResponse
+    public function show(RouteIdRequest $request, CustomerServiceContract $customerService): ApiResponse
     {
         $response = new ApiResponse(CustomerResource::make(
-            $customerService->show($id)
+            $customerService->show($request->id)
         ));
 
         return $response->format();
@@ -81,13 +82,13 @@ class CustomerController extends Controller
      *
      * @throws JsonException
      */
-    public function destroy(int $id, CustomerServiceContract $customerService): ApiResponse
+    public function destroy(RouteIdRequest $request, CustomerServiceContract $customerService): ApiResponse
     {
         $response = new ApiResponse();
-        $customerService->destroy($id);
+        $customerService->destroy($request->id);
 
         return $response
-            ->addMessage("Customer {$id} deleted successfully")
+            ->addMessage("Customer {$request->id} deleted successfully")
             ->format();
     }
 }
