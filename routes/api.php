@@ -28,7 +28,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
                 ->name('list')
                 ->withoutMiddleware('auth:sanctum');
 
-            Route::get('/{id}', 'show')->name('show');
+            Route::get('/{id}', 'show')
+                ->name('show')
+                ->withoutMiddleware('auth:sanctum');
+
             Route::post('/', 'store')->name('store');
             Route::put('/', 'update')->name('update');
             Route::patch('/', 'update')->name('update');
