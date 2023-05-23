@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\InvoiceStoreRequest;
-use App\Http\Requests\InvoiceUpdateRequest;
+use App\Http\Requests\V1\InvoiceStoreRequest;
+use App\Http\Requests\V1\InvoiceUpdateRequest;
 use App\Http\Requests\V1\InvoiceBulkStoreRequest;
 use App\Http\Resources\V1\InvoiceCollection;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Models\Invoice;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -20,24 +19,23 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $filter     = new InvoicesFilter();
-        $queryItems = $filter->transform($request); //[['column', 'operator', 'value']]
+        $invoicesCollection = new InvoiceCollection(Invoice::paginate(10));
 
-        if (count($queryItems) === 0) {
-            return new InvoiceCollection(Invoice::paginate());
-        } else {
-            $invoices = Invoice::where($queryItems)->paginate();
-
-            return new InvoiceCollection($invoices->appends($request->query()));
-        }
+        return response()->json([
+            'data' => $invoicesCollection->all(),
+            'meta' => [
+                'currentPage' => $invoicesCollection->currentPage(),
+                'lastPage'    => $invoicesCollection->lastPage(),
+            ]
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InvoiceStoreRequest $request): RedirectResponse
+    public function store(InvoiceStoreRequest $request): InvoiceResource
     {
-        //
+        return new InvoiceResource(Invoice::create($request->all()));
     }
 
     public function bulkStore(InvoiceBulkStoreRequest $request)
@@ -52,7 +50,7 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show(Invoice $invoice): InvoiceResource
     {
         return new InvoiceResource($invoice);
     }
@@ -60,16 +58,20 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(InvoiceUpdateRequest $request, Invoice $invoice): RedirectResponse
+    public function update(InvoiceUpdateRequest $request, Invoice $invoice): InvoiceResource
     {
-        //
+        return new InvoiceResource(Invoice::update($request->all()));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Invoice $invoice): RedirectResponse
+    public function destroy(Invoice $invoice)
     {
-        //
+        $isDestroyed = Invoice::destroy($invoice->id);
+
+        return response()->json([
+            'status' => $isDestroyed ? 'success' : 'error',
+        ]);
     }
 }

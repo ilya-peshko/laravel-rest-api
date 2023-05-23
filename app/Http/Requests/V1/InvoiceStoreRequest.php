@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InvoiceStoreRequest extends FormRequest
 {
@@ -11,7 +12,9 @@ class InvoiceStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $user = $this->user();
+
+        return $user !== null && $user->tokenCan('create');
     }
 
     /**
@@ -22,7 +25,20 @@ class InvoiceStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'customerId' => ['required', 'integer', Rule::exists('customers', 'id')],
+            'amount'     => ['required', 'numeric'],
+            'status'     => ['required',  Rule::in(['Billed', 'billed', 'Void', 'void', 'Paid', 'paid'])],
+            'billedDate' => ['required', 'date_format:Y-m-d H:i:s'],
+            'paidDate'   => ['sometimes', 'date_format:Y-m-d H:i:s', 'nullable'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'customer_id' => $this->customerId,
+            'billed_date' => $this->billedDate,
+            'paid_date'   => $this->paidDate,
+        ]);
     }
 }

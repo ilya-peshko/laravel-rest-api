@@ -9,6 +9,7 @@ class ApiResponse extends JsonResponse
 {
     protected array $errors   = [];
     protected array $messages = [];
+    protected array $meta     = [];
 
     protected bool $success  = true;
     protected bool $redirect = false;
@@ -29,6 +30,20 @@ class ApiResponse extends JsonResponse
     public function addMessage(string $message): self
     {
         $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param iterable $metaData
+     *
+     * @return ApiResponse
+     */
+    public function addMeta(iterable $metaData): self
+    {
+        foreach ($metaData as $key => $value) {
+            $this->meta[$key] = $value;
+        }
 
         return $this;
     }
@@ -68,9 +83,9 @@ class ApiResponse extends JsonResponse
             'data'     => json_decode($this->data, true, 512, JSON_THROW_ON_ERROR),
             'errors'   => $this->errors,
             'messages' => $this->messages,
+            'meta'     => $this->meta,
             'success'  => $this->success,
         ];
-        ksort($data);
         $this->setJson(json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
 
         return $this;

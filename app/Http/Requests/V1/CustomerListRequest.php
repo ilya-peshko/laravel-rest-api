@@ -24,8 +24,8 @@ class CustomerListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'limit'           => ['sometimes', 'int', 'max:'.config('limits.customer_limit')],
-            'pageNumber'      => ['sometimes', 'int'],
+            'limit'           => ['sometimes', 'integer', 'max:'.config('limits.customer_limit')],
+            'pageNumber'      => ['sometimes', 'integer'],
             'name'            => ['sometimes', 'string'],
             'type'            => ['sometimes', Rule::in(['Individual', 'Business', 'individual', 'business'])],
             'email'           => ['sometimes', 'email'],

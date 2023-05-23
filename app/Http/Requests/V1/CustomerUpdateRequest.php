@@ -30,7 +30,7 @@ class CustomerUpdateRequest extends FormRequest
 
         if ($method === Request::METHOD_PUT) {
             return [
-                'id'         => ['required', 'int'],
+                'id'         => ['required', 'integer', Rule::exists('customers', 'id')],
                 'name'       => ['required'],
                 'type'       => ['required', Rule::in(['Individual', 'Business', 'individual', 'business'])],
                 'email'      => ['required', 'email'],
@@ -41,7 +41,7 @@ class CustomerUpdateRequest extends FormRequest
             ];
         } else {
             return [
-                'id'         => ['required', 'int'],
+                'id'         => ['required', 'integer', Rule::exists('customers', 'id')],
                 'name'       => ['sometimes'],
                 'type'       => ['sometimes', Rule::in(['Individual', 'Business', 'individual', 'business'])],
                 'email'      => ['sometimes', 'email'],

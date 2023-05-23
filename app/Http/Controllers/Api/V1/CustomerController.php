@@ -10,7 +10,6 @@ use App\Http\Requests\V1\CustomerUpdateRequest;
 use App\Http\Resources\V1\CustomerCollection;
 use App\Http\Responses\V1\ApiResponse;
 use App\Http\Resources\V1\CustomerResource;
-use App\Models\Customer;
 use JsonException;
 
 class CustomerController extends Controller
@@ -22,9 +21,15 @@ class CustomerController extends Controller
      */
     public function list(CustomerListRequest $request, CustomerServiceContract $customerService): ApiResponse
     {
-        $response = new ApiResponse(CustomerCollection::make(
-            $customerService->list($request->toDto())
-        ));
+        $dto = $request->toDto();
+
+        $collection = $customerService->list($dto);
+        $response   = new ApiResponse(CustomerCollection::make($collection));
+
+        $response->addMeta([
+            'limit'       => $dto->limit,
+            'currentPage' => $dto->pageNumber,
+        ]);
 
         return $response->format();
     }

@@ -48,4 +48,9 @@ final class CustomerRepository implements CustomerRepositoryContract
     {
         return Customer::destroy($id);
     }
+
+    public function count(): int
+    {
+        return Customer::count();
+    }
 }

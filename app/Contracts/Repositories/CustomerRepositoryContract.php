@@ -19,4 +19,6 @@ interface CustomerRepositoryContract
     public function update(CustomerUpdateDto $dto): ?Model;
 
     public function destroy(int $id): bool;
+
+    public function count(): int;
 }
