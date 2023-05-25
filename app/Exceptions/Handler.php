@@ -63,7 +63,7 @@ class Handler extends ExceptionHandler
             return $apiResponse
                 ->setStatusCode(Response::HTTP_NOT_FOUND)
                 ->setSuccess(false)
-                ->addError($e->getMessage() !== '' ? $e->getMessage() : '404 Page Not Found')
+                ->addError($e->getMessage() !== '' ? $e->getMessage() : __('exceptions.page_not_found'))
                 ->format();
         });
 
@@ -71,7 +71,7 @@ class Handler extends ExceptionHandler
             return $apiResponse
                 ->setStatusCode(Response::HTTP_NOT_FOUND)
                 ->setSuccess(false)
-                ->addError('404 Record Not Found')
+                ->addError(__('exceptions.record_not_found'))
                 ->format();
         });
 

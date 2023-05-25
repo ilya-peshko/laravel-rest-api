@@ -88,7 +88,7 @@ class CustomerController extends Controller
         $customerService->destroy($request->id);
 
         return $response
-            ->addMessage("Customer {$request->id} deleted successfully")
+            ->addMessage(__('messages.customer_deleted', ['id' => $request->id]))
             ->format();
     }
 }

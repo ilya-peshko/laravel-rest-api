@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\HttpFoundation\Request;
 
 class RouteIdRequest extends FormRequest
 {
@@ -12,7 +13,9 @@ class RouteIdRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $user = $this->user();
+
+        return $this->method() === Request::METHOD_GET || ($user !== null && $user->tokenCan('update'));
     }
 
     /**
