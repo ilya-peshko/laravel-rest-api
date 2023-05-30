@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ApiTest extends TestCase
@@ -53,6 +55,11 @@ class ApiTest extends TestCase
      */
     public function test_v1_customers_store(): void
     {
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+
         $response = $this->post('/api/v1/customers', [
             'name'       => 'Gilbert Fisher',
             'type'       => 'Individual',
@@ -75,6 +82,11 @@ class ApiTest extends TestCase
      */
     public function test_v1_customers_destroy(): void
     {
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+
         $customer = Customer::factory()->create([
             'id'    => 10,
             'name'  => 'Gilbert Fisher',

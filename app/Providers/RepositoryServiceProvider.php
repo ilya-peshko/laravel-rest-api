@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Contracts\Repositories\CustomerRepositoryContract;
-use App\Repositories\CustomerRepository;
+use App\Contracts\Repositories\RegistrationRepositoryContract;
+use App\Repositories\V1\RegistrationRepository;
+use App\Repositories\V1\CustomerRepository;
 use Illuminate\Support\ServiceProvider;
 
 class  RepositoryServiceProvider extends ServiceProvider
@@ -15,7 +17,8 @@ class  RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(CustomerRepositoryContract::class, CustomerRepository::class);
+        $this->app->bind(RegistrationRepositoryContract::class, RegistrationRepository::class);
     }
 
     /**
@@ -25,6 +28,5 @@ class  RepositoryServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind(CustomerRepositoryContract::class, CustomerRepository::class);
     }
 }

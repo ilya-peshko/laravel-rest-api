@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api\V1;
 use App\Contracts\Services\CustomerServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CustomerListRequest;
-use App\Http\Requests\RouteIdRequest;
+use App\Http\Requests\V1\RouteIdRequest;
 use App\Http\Requests\V1\CustomerStoreRequest;
 use App\Http\Requests\V1\CustomerUpdateRequest;
 use App\Http\Resources\V1\CustomerCollection;
 use App\Http\Responses\V1\ApiResponse;
 use App\Http\Resources\V1\CustomerResource;
 use JsonException;
+use Symfony\Component\HttpFoundation\Response;
 
 class CustomerController extends Controller
 {
@@ -22,14 +23,13 @@ class CustomerController extends Controller
      */
     public function list(CustomerListRequest $request, CustomerServiceContract $customerService): ApiResponse
     {
-        $dto = $request->toDto();
-
-        $collection = $customerService->list($dto);
-        $response   = new ApiResponse(CustomerCollection::make($collection));
+        $apiListingDto = $customerService->list($request->toDto());
+        $response      = new ApiResponse(CustomerCollection::make($apiListingDto->collection));
 
         $response->addMeta([
-            'limit'       => $dto->limit,
-            'currentPage' => $dto->pageNumber,
+            'lastPage' => $apiListingDto->lastPage,
+            'total'    => $apiListingDto->total,
+            'perPage'  => $apiListingDto->count,
         ]);
 
         return $response->format();
@@ -84,11 +84,16 @@ class CustomerController extends Controller
      */
     public function destroy(RouteIdRequest $request, CustomerServiceContract $customerService): ApiResponse
     {
-        $response = new ApiResponse();
-        $customerService->destroy($request->id);
+        $response  = new ApiResponse();
+        $isDeleted = $customerService->destroy($request->id);
 
-        return $response
-            ->addMessage(__('messages.customer_deleted', ['id' => $request->id]))
-            ->format();
+        if ($isDeleted) {
+            $response->addMessage(__('messages.customer_deleted', ['id' => $request->id]));
+        } else {
+            $response->addError(__('messages.customer_not_deleted', ['id' => $request->id]))
+                ->setStatusCode(Response::HTTP_BAD_REQUEST);
+        }
+
+        return $response->format();
     }
 }

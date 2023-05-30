@@ -25,7 +25,6 @@ class CustomerListRequest extends FormRequest
     {
         return [
             'limit'           => ['sometimes', 'integer', 'max:'.config('limits.customer_limit')],
-            'pageNumber'      => ['sometimes', 'integer'],
             'name'            => ['sometimes', 'string'],
             'type'            => ['sometimes', Rule::in(['Individual', 'Business', 'individual', 'business'])],
             'email'           => ['sometimes', 'email'],
@@ -41,7 +40,6 @@ class CustomerListRequest extends FormRequest
     {
         return new CustomerListDto(
             limit: $this->get('limit', config('limits.customer_limit')),
-            pageNumber: $this->get('pageNumber', 1),
             name: $this->get('name'),
             type: $this->get('type'),
             email: $this->get('email'),

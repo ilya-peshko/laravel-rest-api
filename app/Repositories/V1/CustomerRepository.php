@@ -1,26 +1,31 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\V1;
 
 use App\Contracts\Repositories\CustomerRepositoryContract;
+use App\Dto\ApiListingDto;
 use App\Dto\Customer\CustomerListDto;
 use App\Dto\Customer\CustomerStoreDto;
 use App\Dto\Customer\CustomerUpdateDto;
 use App\Http\Filters\V1\CustomerFilter;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 final class CustomerRepository implements CustomerRepositoryContract
 {
-    public function list(CustomerListDto $dto): Collection
+    public function list(CustomerListDto $dto): ApiListingDto
     {
         $queryParams = $dto->toArray($dto);
 
-        $model = Customer::filter(new CustomerFilter($queryParams));
-        $model->paginate($queryParams['limit'], ['*'], 'page', $queryParams['pageNumber']);
+        $builder   = Customer::filter(new CustomerFilter($queryParams));
+        $paginated = $builder->paginate($dto->limit, ['*'], 'page');
 
-        return $model->get();
+        return new ApiListingDto(
+            collection: $paginated->getCollection(),
+            lastPage: $paginated->lastPage(),
+            total: $paginated->total(),
+            count: $paginated->count(),
+        );
     }
 
     public function show(int $id): ?Model
@@ -47,10 +52,5 @@ final class CustomerRepository implements CustomerRepositoryContract
     public function destroy(int $id): bool
     {
         return Customer::destroy($id);
-    }
-
-    public function count(): int
-    {
-        return Customer::count();
     }
 }

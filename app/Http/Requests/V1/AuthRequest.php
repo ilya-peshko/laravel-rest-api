@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\V1;
 
-use Illuminate\Contracts\Validation\Rule;
+use App\Dto\Authorization\AuthDto;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AuthRequest extends FormRequest
 {
@@ -22,10 +23,26 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->route()->getName() === 'register') {
+            return [
+                'name'       => ['required', 'string'],
+                'email'      => ['required', 'email', 'unique:users'],
+                'password'   => ['required', 'min:8'],
+            ];
+        }
+
         return [
-            'name'       => ['required', 'string'],
-            'email'      => ['required', 'email', 'unique:users'],
+            'email'      => ['required', 'email', Rule::exists('users', 'email')],
             'password'   => ['required', 'min:8'],
         ];
+    }
+
+    public function toDto(): AuthDto
+    {
+        return new AuthDto(
+            name: $this->get('name'),
+            email: $this->get('email'),
+            password: $this->get('password'),
+        );
     }
 }

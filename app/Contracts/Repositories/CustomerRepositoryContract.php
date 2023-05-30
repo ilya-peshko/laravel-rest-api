@@ -2,15 +2,15 @@
 
 namespace App\Contracts\Repositories;
 
+use App\Dto\ApiListingDto;
 use App\Dto\Customer\CustomerListDto;
 use App\Dto\Customer\CustomerStoreDto;
 use App\Dto\Customer\CustomerUpdateDto;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 interface CustomerRepositoryContract
 {
-    public function list(CustomerListDto $dto): Collection;
+    public function list(CustomerListDto $dto): ApiListingDto;
 
     public function show(int $id): ?Model;
 
@@ -19,6 +19,4 @@ interface CustomerRepositoryContract
     public function update(CustomerUpdateDto $dto): ?Model;
 
     public function destroy(int $id): bool;
-
-    public function count(): int;
 }

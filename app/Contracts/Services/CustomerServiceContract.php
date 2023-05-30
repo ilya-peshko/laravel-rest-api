@@ -2,17 +2,16 @@
 
 namespace App\Contracts\Services;
 
+use App\Dto\ApiListingDto;
 use App\Dto\Customer\CustomerListDto;
 use App\Dto\Customer\CustomerStoreDto;
 use App\Dto\Customer\CustomerUpdateDto;
-//use App\Exceptions\CreateModelException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
 
 interface CustomerServiceContract
 {
-    public function list(CustomerListDto $dto): Collection;
+    public function list(CustomerListDto $dto): ApiListingDto;
 
     /**
      * @throws ModelNotFoundException

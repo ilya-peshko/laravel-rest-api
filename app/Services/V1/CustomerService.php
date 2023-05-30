@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\V1;
 
 use App\Contracts\Repositories\CustomerRepositoryContract;
 use App\Contracts\Services\CustomerServiceContract;
+use App\Dto\ApiListingDto;
 use App\Dto\Customer\CustomerListDto;
 use App\Dto\Customer\CustomerStoreDto;
 use App\Dto\Customer\CustomerUpdateDto;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 final class CustomerService implements CustomerServiceContract
 {
@@ -17,7 +17,7 @@ final class CustomerService implements CustomerServiceContract
     ) {
     }
 
-    public function list(CustomerListDto $dto): Collection
+    public function list(CustomerListDto $dto): ApiListingDto
     {
         return $this->customerRepository->list($dto);
     }

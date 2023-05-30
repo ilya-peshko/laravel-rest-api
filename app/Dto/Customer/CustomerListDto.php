@@ -8,7 +8,6 @@ class CustomerListDto extends BaseDto
 {
     public function __construct(
         public readonly int $limit,
-        public readonly int $pageNumber,
         public readonly ?string $name,
         public readonly ?string $type,
         public readonly ?string $email,
