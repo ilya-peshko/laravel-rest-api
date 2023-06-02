@@ -16,7 +16,7 @@ class CustomerStoreRequest extends FormRequest
     {
         $user = $this->user();
 
-        return $user !== null && $user->tokenCan('create');
+        return $user !== null && $user->tokenCan('server:store');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Faker\Provider\en_AU\Address;
 
@@ -21,9 +22,8 @@ class CustomerFactory extends Factory
         $name = $type === 'Individual' ? $this->faker->name() : $this->faker->company();
 
         return [
-            'name'        => $name,
+            'user_id'     => User::factory(),
             'type'        => $type,
-            'email'       => $this->faker->email(),
             'address'     => $this->faker->streetAddress(),
             'city'        => $this->faker->city(),
             'state'       => Address::state(),

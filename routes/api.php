@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+Route::prefix('v1')->group(function () {
     Route::group(['middleware' => 'auth:sanctum', 'controller' => CustomerController::class], function () {
         Route::prefix('customers')->name('customers.')->group(function () {
             Route::get('/', 'list')

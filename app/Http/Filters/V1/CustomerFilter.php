@@ -13,7 +13,7 @@ class CustomerFilter extends QueryFilter
      */
     public function name(Builder $builder, string $name)
     {
-        $builder->where('name', 'like', "%{$name}%");
+        $builder->whereRelation('user', 'name', 'like', "%{$name}%");
     }
 
     /**
@@ -31,7 +31,7 @@ class CustomerFilter extends QueryFilter
      */
     public function email(Builder $builder, string $email)
     {
-        $builder->where('email', 'like', "%{$email}%");
+        $builder->whereRelation('user', 'email', 'like', "%{$email}%");
     }
 
     /**

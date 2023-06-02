@@ -26,7 +26,7 @@ final class AuthorizationService implements AuthorizationServiceContract
 
         $user = $this->registrationRepository->create($dto);
 
-        return $user->createToken('basic-token')->plainTextToken;
+        return $user->createToken('basic-token', ['server:update', 'server:create', 'server:delete'])->plainTextToken;
     }
 
     /**
@@ -43,6 +43,6 @@ final class AuthorizationService implements AuthorizationServiceContract
         $user = Auth::user();
         $user->tokens()->delete();
 
-        return $user->createToken('basic-token')->plainTextToken;
+        return $user->createToken('basic-token', ['server:update', 'server:store', 'server:destroy'])->plainTextToken;
     }
 }

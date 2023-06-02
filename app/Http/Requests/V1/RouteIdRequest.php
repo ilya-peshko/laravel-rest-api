@@ -15,7 +15,7 @@ class RouteIdRequest extends FormRequest
     {
         $user = $this->user();
 
-        return $this->method() === Request::METHOD_GET || ($user !== null && $user->tokenCan('update'));
+        return $this->method() === Request::METHOD_GET || ($user !== null && $user->tokenCan('server:destroy'));
     }
 
     /**
@@ -30,18 +30,8 @@ class RouteIdRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get all of the input and files for the request.
-     *
-     * @param array|mixed|null $keys
-     *
-     * @return array
-     */
-    public function all($keys = null): array
+    public function prepareForValidation(): void
     {
-        return array_merge(
-            parent::all($keys),
-            $this->route()->parameters()
-        );
+        $this->merge($this->route()->parameters());
     }
 }

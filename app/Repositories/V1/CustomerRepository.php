@@ -17,23 +17,27 @@ final class CustomerRepository implements CustomerRepositoryContract
     {
         $queryParams = $dto->toArray($dto);
 
-        $builder   = Customer::filter(new CustomerFilter($queryParams));
-        $paginated = $builder->paginate($dto->limit, ['*'], 'page');
+        $builder = Customer::filter(new CustomerFilter($queryParams));
+        $builder->with('user');
+
+        $paginated = $builder->paginate($dto->limit, ['*'], 'page')->withQueryString();
 
         return new ApiListingDto(
             collection: $paginated->getCollection(),
             lastPage: $paginated->lastPage(),
             total: $paginated->total(),
             count: $paginated->count(),
+            nextPageUrl: $paginated->nextPageUrl() ?? null,
+            prevPageUrl: $paginated->previousPageUrl() ?? null,
         );
     }
 
-    public function show(int $id): ?Model
+    public function find(int $id): ?Model
     {
-        $customers = Customer::findOrFail($id);
-        $customers->load('invoices');
+        $customer = Customer::findOrFail($id);
+        $customer->load('invoices');
 
-        return $customers;
+        return $customer;
     }
 
     public function store(CustomerStoreDto $dto): ?Model

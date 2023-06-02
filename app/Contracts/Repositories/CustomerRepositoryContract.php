@@ -12,7 +12,7 @@ interface CustomerRepositoryContract
 {
     public function list(CustomerListDto $dto): ApiListingDto;
 
-    public function show(int $id): ?Model;
+    public function find(int $id): ?Model;
 
     public function store(CustomerStoreDto $dto): ?Model;
 

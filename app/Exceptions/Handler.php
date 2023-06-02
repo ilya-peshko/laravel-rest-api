@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use JsonException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -94,6 +95,14 @@ class Handler extends ExceptionHandler
         $this->renderable(function (AuthenticationException $e) use ($apiResponse) {
             return $apiResponse
                 ->setStatusCode(Response::HTTP_UNAUTHORIZED)
+                ->setSuccess(false)
+                ->addError($e->getMessage())
+                ->format();
+        });
+
+        $this->renderable(function (AccessDeniedHttpException $e) use ($apiResponse) {
+            return $apiResponse
+                ->setStatusCode(Response::HTTP_FORBIDDEN)
                 ->setSuccess(false)
                 ->addError($e->getMessage())
                 ->format();

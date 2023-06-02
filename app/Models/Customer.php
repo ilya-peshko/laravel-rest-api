@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
@@ -12,9 +13,8 @@ class Customer extends Model
     use HasFactory, Filterable;
 
     protected $fillable = [
-        'name',
+        'user_id',
         'type',
-        'email',
         'address',
         'city',
         'state',
@@ -27,5 +27,13 @@ class Customer extends Model
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -12,6 +12,8 @@ class ApiListingDto extends BaseDto
         public readonly int $lastPage,
         public readonly int $total,
         public readonly int $count,
+        public readonly ?string $nextPageUrl,
+        public readonly ?string $prevPageUrl,
     ) {
     }
 }
