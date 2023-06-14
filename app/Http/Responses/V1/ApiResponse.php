@@ -79,7 +79,11 @@ class ApiResponse extends JsonResponse
      */
     public function format(): ApiResponse
     {
-        $data = json_decode($this->data, true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $this->data,
+            associative: true,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
         $response = [
             'data'     => $data['data'] ?? $data,

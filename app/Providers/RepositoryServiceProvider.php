@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
-use App\Contracts\Repositories\CustomerRepositoryContract;
-use App\Contracts\Repositories\RegistrationRepositoryContract;
-use App\Repositories\V1\RegistrationRepository;
-use App\Repositories\V1\CustomerRepository;
+use App\Repositories\V1\Address\AddressRepository;
+use App\Repositories\V1\Address\AddressRepositoryContract;
+use App\Repositories\V1\Registration\RegistrationRepository;
+use App\Repositories\V1\Registration\RegistrationRepositoryContract;
+use App\Repositories\V1\User\UserRepository;
+use App\Repositories\V1\User\UserRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 
 class  RepositoryServiceProvider extends ServiceProvider
@@ -17,7 +19,8 @@ class  RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(CustomerRepositoryContract::class, CustomerRepository::class);
+        $this->app->bind(UserRepositoryContract::class, UserRepository::class);
+        $this->app->bind(AddressRepositoryContract::class, AddressRepository::class);
         $this->app->bind(RegistrationRepositoryContract::class, RegistrationRepository::class);
     }
 

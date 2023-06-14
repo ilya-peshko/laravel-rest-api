@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Contracts\Services\AuthorizationServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AuthRequest;
 use App\Http\Responses\V1\ApiResponse;
+use App\Services\V1\Authorization\AuthorizationServiceContract;
 
 class AuthController extends Controller
 {

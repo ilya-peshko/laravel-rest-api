@@ -2,7 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Customer;
+use App\Enums\InvoiceStatusesEnum;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,14 +18,14 @@ class InvoiceFactory extends Factory
      */
     public function definition(): array
     {
-        $status = $this->faker->randomElement(['Billed', 'Paid', 'Void']);
+        $status = $this->faker->randomElement([InvoiceStatusesEnum::Paid->value, InvoiceStatusesEnum::Void->value, InvoiceStatusesEnum::Billed->value]);
 
         return [
-            'customer_id'  => Customer::factory(),
+            'user_id'      => User::factory(),
             'amount'       => $this->faker->numberBetween(100, 20000),
             'status'       => $status,
             'billed_date'  => $this->faker->dateTimeThisDecade(),
-            'paid_date'    => $status === 'Paid' ? $this->faker->dateTimeThisDecade() : null,
+            'paid_date'    => $status === InvoiceStatusesEnum::Paid->value ? $this->faker->dateTimeThisDecade() : null,
         ];
     }
 }

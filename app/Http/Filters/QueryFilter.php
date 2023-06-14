@@ -2,7 +2,6 @@
 
 namespace App\Http\Filters;
 
-use App\Contracts\Filters\QueryFilterContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
